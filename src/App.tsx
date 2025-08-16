@@ -2,12 +2,14 @@ import './App.css'
 
 import { Canvas } from '@react-three/fiber'
 import { Physics } from '@react-three/cannon'
+import { OrbitControls } from '@react-three/drei'
 import { Box, Plane } from './components'
 
 const App = () => {
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       <Canvas camera={{ position: [0, 5, 10] }}>
+        <OrbitControls />
         <ambientLight intensity={Math.PI / 2} />
         <Physics gravity={[0, -9.82, 0]}>
           <Box
