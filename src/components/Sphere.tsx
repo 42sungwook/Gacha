@@ -1,40 +1,39 @@
 import * as THREE from 'three'
 import { useState } from 'react'
 import type { ThreeElements } from '@react-three/fiber'
-import { useBox } from '@react-three/cannon'
+import { useSphere } from '@react-three/cannon'
 
-const Box = ({
+const Sphere = ({
   position,
   mass = 1,
   color = '#2f74c0',
-  scale = Math.pow(mass, 1 / 3),
+  radius = Math.pow(mass, 1 / 3) * 0.5,
   ...meshProps
 }: {
   position: [number, number, number]
   mass?: number
   color?: string
-  scale?: number
+  radius?: number
 } & ThreeElements['mesh']) => {
   const [hovered, setHover] = useState(false)
 
-  const [ref] = useBox<THREE.Mesh>(() => ({
+  const [ref] = useSphere<THREE.Mesh>(() => ({
     mass,
     position,
-    args: [scale, scale, scale]
+    args: [radius]
   }))
 
   return (
     <mesh
       ref={ref}
-      scale={scale}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
       {...meshProps}
     >
-      <boxGeometry args={[1, 1, 1]} />
+      <sphereGeometry args={[radius, 32, 32]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : color} />
     </mesh>
   )
 }
 
-export default Box
+export default Sphere

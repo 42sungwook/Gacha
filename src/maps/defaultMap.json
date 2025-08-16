@@ -1,0 +1,131 @@
+{
+  "name": "기본 경주 맵",
+  "description": "간단한 장애물이 있는 기본 낙하 경주 맵",
+  "gameArea": {
+    "boundaries": {
+      "width": 10,
+      "height": 200,
+      "depth": 10,
+      "wallHeight": 200
+    },
+    "floor": {
+      "position": { "x": 0, "y": -1, "z": 0 },
+      "color": "#cccccc"
+    }
+  },
+  "boxes": [
+    {
+      "id": "red-box",
+      "position": { "x": -2, "y": 15, "z": -2 },
+      "mass": 0.5,
+      "color": "#ff6b6b",
+      "size": { "x": 1, "y": 1, "z": 1 }
+    },
+    {
+      "id": "blue-box",
+      "position": { "x": 0, "y": 15, "z": 0 },
+      "mass": 1,
+      "color": "#4ecdc4",
+      "size": { "x": 1, "y": 1, "z": 1 }
+    },
+    {
+      "id": "green-box",
+      "position": { "x": 2, "y": 15, "z": 2 },
+      "mass": 1.5,
+      "color": "#45b7d1",
+      "size": { "x": 1, "y": 1, "z": 1 }
+    },
+    {
+      "id": "yellow-box",
+      "position": { "x": -1, "y": 15, "z": 1 },
+      "mass": 2,
+      "color": "#f9ca24",
+      "size": { "x": 1, "y": 1, "z": 1 }
+    }
+  ],
+  "walls": [
+    {
+      "id": "wall-left",
+      "position": { "x": -5, "y": 1, "z": 0 },
+      "size": { "x": 0.5, "y": 50, "z": 10 }
+    },
+    {
+      "id": "wall-right",
+      "position": { "x": 5, "y": 1, "z": 0 },
+      "size": { "x": 0.5, "y": 50, "z": 10 }
+    },
+    {
+      "id": "wall-front",
+      "position": { "x": 0, "y": 1, "z": -5 },
+      "size": { "x": 10, "y": 50, "z": 0.5 }
+    },
+    {
+      "id": "wall-back",
+      "position": { "x": 0, "y": 1, "z": 5 },
+      "size": { "x": 10, "y": 50, "z": 0.5 }
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "platform-1",
+      "type": "box",
+      "position": { "x": -1, "y": 10, "z": 0 },
+      "size": { "x": 3, "y": 0.5, "z": 1 },
+      "rotation": { "x": 0, "y": 0, "z": 0.1 },
+      "color": "#e67e22"
+    },
+    {
+      "id": "platform-2",
+      "type": "box",
+      "position": { "x": 2, "y": 7, "z": -1 },
+      "size": { "x": 2, "y": 0.5, "z": 3 },
+      "rotation": { "x": 0.15, "y": 0, "z": -0.1 },
+      "color": "#e67e22"
+    },
+    {
+      "id": "ramp-left",
+      "type": "box",
+      "position": { "x": -2.5, "y": 8, "z": 1 },
+      "size": { "x": 1.5, "y": 0.3, "z": 2 },
+      "rotation": { "x": 0, "y": 0.3, "z": 0.2 },
+      "color": "#f39c12"
+    },
+    {
+      "id": "ramp-right",
+      "type": "box",
+      "position": { "x": 1.5, "y": 5, "z": 2 },
+      "size": { "x": 2, "y": 0.3, "z": 1.5 },
+      "rotation": { "x": -0.2, "y": -0.1, "z": 0 },
+      "color": "#f39c12"
+    },
+    {
+      "id": "slide-1",
+      "type": "box",
+      "position": { "x": 0, "y": 6, "z": -2 },
+      "size": { "x": 1, "y": 0.2, "z": 3 },
+      "rotation": { "x": 0.3, "y": 0, "z": 0 },
+      "color": "#9b59b6"
+    },
+    {
+      "id": "spinner",
+      "type": "cylinder",
+      "position": { "x": 0, "y": 3, "z": 0 },
+      "size": { "x": 0.2, "y": 2, "z": 0.2 },
+      "rotation": { "x": 0, "y": 50, "z": 0 },
+      "color": "#e74c3c",
+      "mass": 0
+    }
+  ],
+  "finishLine": {
+    "position": { "x": 0, "y": -0.5, "z": 0 },
+    "size": { "x": 8, "y": 0.1, "z": 8 },
+    "color": "#2ecc71"
+  },
+  "physics": {
+    "gravity": { "x": 0, "y": -9.82, "z": 0 }
+  },
+  "camera": {
+    "position": { "x": 0, "y": 8, "z": 12 },
+    "target": { "x": 0, "y": 5, "z": 0 }
+  }
+}

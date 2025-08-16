@@ -1,0 +1,5 @@
+export { Player } from './Player'
+export { Wall } from './Wall'
+export { Obstacle } from './Obstacle'
+export { FinishLine } from './FinishLine'
+export { Floor } from './Floor'
