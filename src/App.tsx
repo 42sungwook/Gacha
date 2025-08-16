@@ -1,48 +1,37 @@
 import './App.css'
 
-import * as THREE from 'three'
-import { useRef, useState } from 'react'
-import { Canvas, useFrame, type ThreeElements } from '@react-three/fiber'
-
-function Box(props: ThreeElements['mesh']) {
-  const meshRef = useRef<THREE.Mesh>(null!)
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  useFrame((_, delta) => (meshRef.current.rotation.x += delta))
-  return (
-    <mesh
-      {...props}
-      ref={meshRef}
-      scale={active ? 1.5 : 1}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? 'hotpink' : '#2f74c0'} />
-    </mesh>
-  )
-}
+import { Canvas } from '@react-three/fiber'
+import { Physics } from '@react-three/cannon'
+import { Box, Plane } from './components'
 
 const App = () => {
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <Canvas>
+      <Canvas camera={{ position: [0, 5, 10] }}>
         <ambientLight intensity={Math.PI / 2} />
-        <spotLight
-          position={[10, 10, 10]}
-          angle={0.15}
-          penumbra={1}
-          decay={0}
-          intensity={Math.PI}
-        />
-        <pointLight
-          position={[-10, -10, -10]}
-          decay={0}
-          intensity={Math.PI}
-        />
-        <Box position={[-1.2, 0, 0]} />
-        <Box position={[1.2, 0, 0]} />
+        <Physics gravity={[0, -9.82, 0]}>
+          <Box
+            position={[-1, 15, 0]}
+            mass={0.5}
+            color="#ff6b6b"
+          />
+          <Box
+            position={[0, 10, 0]}
+            mass={1}
+            color="#4ecdc4"
+          />
+          <Box
+            position={[1, 12, 0]}
+            mass={2}
+            color="#45b7d1"
+          />
+          <Box
+            position={[0.5, 18, 0]}
+            mass={5}
+            color="#96ceb4"
+          />
+          <Plane />
+        </Physics>
       </Canvas>
     </div>
   )
