@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { GameContent } from './GameContent'
 import { RankingDisplay } from './RankingDisplay'
+import { PlayerInput } from './PlayerInput'
 import type { GameConfig } from '../types/gameConfig'
 import {
-  getDefaultPlayers,
   getDefaultPositions,
   type PlayerObjectWithPosition
 } from '../utils/mapRegistry'
+import { parsePlayersInput, validatePlayersInput } from '../utils/playerParser'
 import { useFinishLineDetection } from '../hooks/useFinishLineDetection'
 import styled from 'styled-components'
 import { theme } from '../styles'
@@ -19,33 +20,46 @@ interface GameMapProps {
 export function GameMap({ config }: GameMapProps) {
   const [raceStarted, setRaceStarted] = useState(false)
   const [cameraTrackingEnabled, setCameraTrackingEnabled] = useState(true)
-  const { finishedPlayers, onPlayerFinish, resetRanking, isPlayerRemoved } =
+  const [playersInput, setPlayersInput] = useState('성욱*5,동현*5,하은*5')
+  const { finishedPlayers, onPlayerFinish, resetRanking } =
     useFinishLineDetection()
   const [removedPlayerIds, setRemovedPlayerIds] = useState<Set<string>>(
     new Set()
   )
 
   const startRace = () => {
+    const validation = validatePlayersInput(playersInput)
+    if (!validation.isValid) {
+      alert(validation.error)
+      return
+    }
+
     resetRanking()
     setRemovedPlayerIds(new Set())
     setRaceStarted(true)
   }
 
-  const players = getDefaultPlayers()
-  const positions = getDefaultPositions()
+  // 입력된 플레이어 수에 맞춰 위치 생성
+  const validation = validatePlayersInput(playersInput)
+  const totalPlayerCount = validation.isValid
+    ? playersInput.split(',').reduce((sum, entry) => {
+        const match = entry.trim().match(/^(.+)\*(\d+)$/)
+        return sum + (match ? parseInt(match[2], 10) : 0)
+      }, 0)
+    : 50
 
-  const playerObjects: PlayerObjectWithPosition[] = players.map(
-    (player, index) => ({
-      ...player,
-      position: positions[index]
-    })
+  const positions = getDefaultPositions(totalPlayerCount)
+  const playerObjects: PlayerObjectWithPosition[] = parsePlayersInput(
+    playersInput,
+    positions
   )
 
   const handlePlayerFinish = (playerId: string) => {
+    const player = playerObjects.find((p) => p.id === playerId)
     const removePlayer = (id: string) => {
       setRemovedPlayerIds((prev) => new Set(prev).add(id))
     }
-    onPlayerFinish(playerId, removePlayer)
+    onPlayerFinish(playerId, player?.name || playerId, removePlayer)
   }
 
   const activePlayers = playerObjects.filter((p) => !removedPlayerIds.has(p.id))
@@ -93,6 +107,11 @@ export function GameMap({ config }: GameMapProps) {
       <RankingDisplay
         finishedPlayers={finishedPlayers}
         raceStarted={raceStarted}
+      />
+
+      <PlayerInput
+        onPlayersChange={setPlayersInput}
+        disabled={raceStarted}
       />
     </Container>
   )

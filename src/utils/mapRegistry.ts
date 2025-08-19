@@ -1,14 +1,11 @@
 import type { MapRegistry } from '../types/mapRegistry'
 import type { GameConfig, Vector3 } from '../types/gameConfig'
 
-export interface PlayerBox {
+export interface PlayerObjectWithPosition {
   id: string
   name: string
   color: string
   mass: number
-}
-
-export interface PlayerObjectWithPosition extends PlayerBox {
   position: Vector3
 }
 
@@ -38,18 +35,29 @@ export const getMapList = () => Object.values(mapRegistry)
 
 export const getMapById = (id: string) => mapRegistry[id]
 
-// Todo: 플레이어 수 설정 ui 추가
-export const getDefaultPlayers = (): PlayerBox[] => [
-  { id: '1', name: '플레이어 1', color: '#e74c3c', mass: 1 },
-  { id: '2', name: '플레이어 2', color: '#3498db', mass: 1 },
-  { id: '3', name: '플레이어 3', color: '#2ecc71', mass: 1 },
-  { id: '4', name: '플레이어 4', color: '#f39c12', mass: 1 }
-]
 
-// Todo: 시작 위치 설정 추가
-export const getDefaultPositions = (): Vector3[] => [
-  { x: -1.5, y: 15, z: -1.5 },
-  { x: 1.5, y: 15, z: -1.5 },
-  { x: -1.5, y: 15, z: 1.5 },
-  { x: 1.5, y: 15, z: 1.5 }
-]
+// 동적으로 시작 위치 생성 (최대 100개까지)
+export const getDefaultPositions = (count?: number): Vector3[] => {
+  const maxCount = count || 100
+  const positions: Vector3[] = []
+  const gridSize = Math.ceil(Math.sqrt(maxCount))
+  const spacing = 1.5
+  const startY = 15
+
+  for (let i = 0; i < maxCount; i++) {
+    const row = Math.floor(i / gridSize)
+    const col = i % gridSize
+    
+    // 중앙을 기준으로 배치
+    const offsetX = (col - (gridSize - 1) / 2) * spacing
+    const offsetZ = (row - (gridSize - 1) / 2) * spacing
+    
+    positions.push({
+      x: offsetX,
+      y: startY + Math.random() * 0.5, // 약간의 높이 변화
+      z: offsetZ
+    })
+  }
+
+  return positions
+}

@@ -7,7 +7,10 @@ interface RankingDisplayProps {
   raceStarted: boolean
 }
 
-export function RankingDisplay({ finishedPlayers, raceStarted }: RankingDisplayProps) {
+export function RankingDisplay({
+  finishedPlayers,
+  raceStarted
+}: RankingDisplayProps) {
   if (!raceStarted || finishedPlayers.length === 0) {
     return null
   }
@@ -16,9 +19,12 @@ export function RankingDisplay({ finishedPlayers, raceStarted }: RankingDisplayP
     <RankingContainer>
       <RankingTitle>순위</RankingTitle>
       {finishedPlayers.map((player) => (
-        <RankingItem key={player.id} rank={player.rank}>
+        <RankingItem
+          key={player.id}
+          rank={player.rank}
+        >
           <RankBadge rank={player.rank}>{player.rank}</RankBadge>
-          <PlayerName>{player.id}</PlayerName>
+          <PlayerName>{player.name}</PlayerName>
         </RankingItem>
       ))}
     </RankingContainer>
@@ -35,6 +41,8 @@ const RankingContainer = styled.div`
   padding: ${theme.spacing.lg};
   border-radius: ${theme.borderRadius.lg};
   min-width: 200px;
+  max-height: 80vh;
+  overflow-y: auto;
   font-family: Arial, sans-serif;
 `
 
@@ -47,7 +55,7 @@ const RankingTitle = styled.h3`
 `
 
 interface RankingItemProps {
-  rank: number;
+  rank: number
 }
 
 const RankingItem = styled.div<RankingItemProps>`
@@ -56,13 +64,13 @@ const RankingItem = styled.div<RankingItemProps>`
   gap: ${theme.spacing.md};
   padding: ${theme.spacing.sm} 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  
+
   &:last-child {
     border-bottom: none;
   }
-  
+
   animation: slideIn 0.3s ease-out;
-  
+
   @keyframes slideIn {
     from {
       opacity: 0;
@@ -76,15 +84,19 @@ const RankingItem = styled.div<RankingItemProps>`
 `
 
 interface RankBadgeProps {
-  rank: number;
+  rank: number
 }
 
 const getRankColor = (rank: number) => {
   switch (rank) {
-    case 1: return '#FFD700' // Gold
-    case 2: return '#C0C0C0' // Silver  
-    case 3: return '#CD7F32' // Bronze
-    default: return theme.colors.gray
+    case 1:
+      return '#FFD700' // Gold
+    case 2:
+      return '#C0C0C0' // Silver
+    case 3:
+      return '#CD7F32' // Bronze
+    default:
+      return theme.colors.gray
   }
 }
 
@@ -92,7 +104,7 @@ const RankBadge = styled.div<RankBadgeProps>`
   width: 30px;
   height: 30px;
   border-radius: ${theme.borderRadius.round};
-  background: ${props => getRankColor(props.rank)};
+  background: ${(props) => getRankColor(props.rank)};
   color: ${theme.colors.black};
   display: flex;
   align-items: center;
