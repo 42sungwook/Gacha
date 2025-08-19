@@ -21,6 +21,7 @@ export function GameMap({ config }: GameMapProps) {
   const [raceStarted, setRaceStarted] = useState(false)
   const [cameraTrackingEnabled, setCameraTrackingEnabled] = useState(true)
   const [playersInput, setPlayersInput] = useState('성욱*5,동현*5,하은*5')
+  const [gravity, setGravity] = useState(-9.82)
   const { finishedPlayers, onPlayerFinish, resetRanking } =
     useFinishLineDetection()
   const [removedPlayerIds, setRemovedPlayerIds] = useState<Set<string>>(
@@ -65,13 +66,42 @@ export function GameMap({ config }: GameMapProps) {
   const activePlayers = playerObjects.filter((p) => !removedPlayerIds.has(p.id))
   const allPlayersFinished = raceStarted && activePlayers.length === 0
 
+  const configWithGravity = {
+    ...config,
+    physics: {
+      ...config.physics,
+      gravity: { x: 0, y: gravity, z: 0 }
+    }
+  }
+
   return (
     <Container>
       <GameOverlay>
         <h3>{config.name}</h3>
         <p>{config.description}</p>
 
-        {!raceStarted && <button onClick={startRace}>경주 시작!</button>}
+        {!raceStarted && (
+          <>
+            <GravityControl>
+              <label>중력 설정: {gravity.toFixed(2)}</label>
+              <GravitySlider
+                type="range"
+                min="-20"
+                max="-2"
+                step="0.1"
+                value={gravity}
+                onChange={(e) => setGravity(parseFloat(e.target.value))}
+              />
+              <GravityPresets>
+                <PresetButton onClick={() => setGravity(-2)}>약함</PresetButton>
+                <PresetButton onClick={() => setGravity(-5)}>보통</PresetButton>
+                <PresetButton onClick={() => setGravity(-9.82)}>지구</PresetButton>
+                <PresetButton onClick={() => setGravity(-15)}>강함</PresetButton>
+              </GravityPresets>
+            </GravityControl>
+            <button onClick={startRace}>경주 시작!</button>
+          </>
+        )}
         {allPlayersFinished && (
           <button onClick={() => setRaceStarted(false)}>다시 시작</button>
         )}
@@ -96,11 +126,12 @@ export function GameMap({ config }: GameMapProps) {
         }}
       >
         <GameContent
-          config={config}
+          config={configWithGravity}
           raceStarted={raceStarted}
           cameraTrackingEnabled={cameraTrackingEnabled}
           onPlayerFinish={handlePlayerFinish}
           activePlayers={activePlayers}
+          allPlayersFinished={allPlayersFinished}
         />
       </Canvas>
 
@@ -160,5 +191,66 @@ const ToggleButton = styled.button<ToggleButtonProps>`
 
   &:active {
     transform: translateY(0);
+  }
+`
+
+const GravityControl = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.sm};
+  margin-bottom: ${theme.spacing.md};
+
+  label {
+    font-size: 14px;
+    color: ${theme.colors.white};
+    font-weight: bold;
+  }
+`
+
+const GravitySlider = styled.input`
+  width: 200px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
+  
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: ${theme.colors.primary};
+    cursor: pointer;
+    border: 2px solid ${theme.colors.white};
+  }
+
+  &::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: ${theme.colors.primary};
+    cursor: pointer;
+    border: 2px solid ${theme.colors.white};
+  }
+`
+
+const GravityPresets = styled.div`
+  display: flex;
+  gap: ${theme.spacing.xs};
+`
+
+const PresetButton = styled.button`
+  background: rgba(255, 255, 255, 0.2);
+  color: ${theme.colors.white};
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: ${theme.spacing.xs} ${theme.spacing.sm};
+  border-radius: ${theme.borderRadius.sm};
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
   }
 `
