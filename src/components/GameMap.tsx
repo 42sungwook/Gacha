@@ -22,7 +22,7 @@ export function GameMap({ config }: GameMapProps) {
   const players = getDefaultPlayers()
   const positions = getDefaultPositions()
 
-  const playerBoxes = players.map((player, index) => ({
+  const playerObjects = players.map((player, index) => ({
     ...player,
     position: positions[index]
   }))
@@ -73,11 +73,15 @@ export function GameMap({ config }: GameMapProps) {
         />
 
         <Physics
-          gravity={[
-            config.physics.gravity.x,
-            config.physics.gravity.y,
-            config.physics.gravity.z
-          ]}
+          gravity={
+            raceStarted
+              ? [
+                  config.physics.gravity.x,
+                  config.physics.gravity.y,
+                  config.physics.gravity.z
+                ]
+              : [0, 0, 0]
+          }
         >
           {/* 결승선 (물리 바닥 역할) */}
           <FinishLine config={config.finishLine} />
@@ -98,20 +102,19 @@ export function GameMap({ config }: GameMapProps) {
             />
           ))}
 
-          {/* 경주 박스들 */}
-          {raceStarted &&
-            playerBoxes.map((playerBox) => (
-              <Player
-                key={playerBox.id}
-                config={{
-                  id: playerBox.id,
-                  position: playerBox.position,
-                  mass: playerBox.mass,
-                  color: playerBox.color,
-                  size: { x: 1, y: 1, z: 1 }
-                }}
-              />
-            ))}
+          {/* 플레이어 경주말들 */}
+          {playerObjects.map((playerBox) => (
+            <Player
+              key={playerBox.id}
+              config={{
+                id: playerBox.id,
+                position: playerBox.position,
+                mass: playerBox.mass,
+                color: playerBox.color,
+                size: { x: 1, y: 1, z: 1 }
+              }}
+            />
+          ))}
         </Physics>
       </Canvas>
     </Container>
