@@ -8,12 +8,14 @@ interface UseCameraTrackingProps {
   playerBodies: PlayerData[]
   config: GameConfig
   raceStarted: boolean
+  enabled: boolean
 }
 
 export function useCameraTracking({ 
   playerBodies, 
   config, 
-  raceStarted 
+  raceStarted,
+  enabled 
 }: UseCameraTrackingProps) {
   const { camera } = useThree()
   const targetPositionRef = useRef(new Vector3())
@@ -72,8 +74,8 @@ export function useCameraTracking({
   }
 
   useFrame(() => {
-    if (!raceStarted || playerBodies.length === 0) {
-      // 경주가 시작되지 않았으면 초기 카메라 설정 유지
+    if (!raceStarted || playerBodies.length === 0 || !enabled) {
+      // 경주가 시작되지 않았거나 카메라 추적이 비활성화되면 초기 카메라 설정 유지
       return
     }
     

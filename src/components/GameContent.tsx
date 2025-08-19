@@ -10,19 +10,22 @@ interface GameContentProps {
   config: GameConfig
   raceStarted: boolean
   playerObjects: PlayerObjectWithPosition[]
+  cameraTrackingEnabled: boolean
 }
 
 export function GameContent({
   config,
   raceStarted,
-  playerObjects
+  playerObjects,
+  cameraTrackingEnabled
 }: GameContentProps) {
   const { addPlayerBody, getPlayerBodies } = usePlayerBodies()
 
   useCameraTracking({
     playerBodies: getPlayerBodies(),
     config,
-    raceStarted
+    raceStarted,
+    enabled: cameraTrackingEnabled
   })
 
   return (
@@ -37,7 +40,7 @@ export function GameContent({
               ]
             : [0, 0, 0]
         }
-        enabled={!raceStarted}
+        enabled={!raceStarted || !cameraTrackingEnabled}
       />
 
       <ambientLight intensity={1.2} />

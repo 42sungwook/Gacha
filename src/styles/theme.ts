@@ -1,6 +1,7 @@
 export const theme = {
   colors: {
     primary: '#2ecc71',
+    primaryHover: '#27ae60',
     secondary: '#3498db', 
     danger: '#e74c3c',
     warning: '#f39c12',
