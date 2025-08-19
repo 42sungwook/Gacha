@@ -44,7 +44,9 @@ const SelectorTitle = styled.h4`
   font-size: ${theme.fontSize.sm};
 `
 
-const MapOption = styled.div<{ isSelected: boolean }>`
+const MapOption = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isSelected'
+})<{ isSelected: boolean }>`
   padding: ${theme.spacing.sm};
   margin: ${theme.spacing.xs} 0;
   background: ${({ isSelected }) =>

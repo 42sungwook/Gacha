@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { GameContent } from './GameContent'
+import { RankingDisplay } from './RankingDisplay'
 import type { GameConfig } from '../types/gameConfig'
-import { getDefaultPlayers, getDefaultPositions, type PlayerObjectWithPosition } from '../utils/mapRegistry'
+import {
+  getDefaultPlayers,
+  getDefaultPositions,
+  type PlayerObjectWithPosition
+} from '../utils/mapRegistry'
+import { useFinishLineDetection } from '../hooks/useFinishLineDetection'
 import styled from 'styled-components'
 import { theme } from '../styles'
 
@@ -13,18 +19,37 @@ interface GameMapProps {
 export function GameMap({ config }: GameMapProps) {
   const [raceStarted, setRaceStarted] = useState(false)
   const [cameraTrackingEnabled, setCameraTrackingEnabled] = useState(true)
+  const { finishedPlayers, onPlayerFinish, resetRanking, isPlayerRemoved } =
+    useFinishLineDetection()
+  const [removedPlayerIds, setRemovedPlayerIds] = useState<Set<string>>(
+    new Set()
+  )
 
   const startRace = () => {
+    resetRanking()
+    setRemovedPlayerIds(new Set())
     setRaceStarted(true)
   }
 
   const players = getDefaultPlayers()
   const positions = getDefaultPositions()
 
-  const playerObjects: PlayerObjectWithPosition[] = players.map((player, index) => ({
-    ...player,
-    position: positions[index]
-  }))
+  const playerObjects: PlayerObjectWithPosition[] = players.map(
+    (player, index) => ({
+      ...player,
+      position: positions[index]
+    })
+  )
+
+  const handlePlayerFinish = (playerId: string) => {
+    const removePlayer = (id: string) => {
+      setRemovedPlayerIds((prev) => new Set(prev).add(id))
+    }
+    onPlayerFinish(playerId, removePlayer)
+  }
+
+  const activePlayers = playerObjects.filter((p) => !removedPlayerIds.has(p.id))
+  const allPlayersFinished = raceStarted && activePlayers.length === 0
 
   return (
     <Container>
@@ -33,9 +58,12 @@ export function GameMap({ config }: GameMapProps) {
         <p>{config.description}</p>
 
         {!raceStarted && <button onClick={startRace}>경주 시작!</button>}
-        
-        {raceStarted && (
-          <ToggleButton 
+        {allPlayersFinished && (
+          <button onClick={() => setRaceStarted(false)}>다시 시작</button>
+        )}
+
+        {raceStarted && !allPlayersFinished && (
+          <ToggleButton
             onClick={() => setCameraTrackingEnabled(!cameraTrackingEnabled)}
             isActive={cameraTrackingEnabled}
           >
@@ -53,13 +81,19 @@ export function GameMap({ config }: GameMapProps) {
           ]
         }}
       >
-        <GameContent 
-          config={config} 
-          raceStarted={raceStarted} 
-          playerObjects={playerObjects} 
+        <GameContent
+          config={config}
+          raceStarted={raceStarted}
           cameraTrackingEnabled={cameraTrackingEnabled}
+          onPlayerFinish={handlePlayerFinish}
+          activePlayers={activePlayers}
         />
       </Canvas>
+
+      <RankingDisplay
+        finishedPlayers={finishedPlayers}
+        raceStarted={raceStarted}
+      />
     </Container>
   )
 }
@@ -83,11 +117,12 @@ const GameOverlay = styled.div`
 `
 
 interface ToggleButtonProps {
-  isActive: boolean;
+  isActive: boolean
 }
 
 const ToggleButton = styled.button<ToggleButtonProps>`
-  background: ${props => props.isActive ? theme.colors.primary : 'rgba(255, 255, 255, 0.2)'};
+  background: ${(props) =>
+    props.isActive ? theme.colors.primary : 'rgba(255, 255, 255, 0.2)'};
   color: ${theme.colors.white};
   border: 2px solid ${theme.colors.primary};
   padding: ${theme.spacing.md} ${theme.spacing.lg};
@@ -99,7 +134,8 @@ const ToggleButton = styled.button<ToggleButtonProps>`
   transition: all 0.3s ease;
 
   &:hover {
-    background: ${props => props.isActive ? theme.colors.primaryHover : 'rgba(255, 255, 255, 0.3)'};
+    background: ${(props) =>
+      props.isActive ? theme.colors.primaryHover : 'rgba(255, 255, 255, 0.3)'};
     transform: translateY(-1px);
   }
 

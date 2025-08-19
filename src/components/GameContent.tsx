@@ -9,15 +9,17 @@ import type { PlayerObjectWithPosition } from '../utils/mapRegistry'
 interface GameContentProps {
   config: GameConfig
   raceStarted: boolean
-  playerObjects: PlayerObjectWithPosition[]
   cameraTrackingEnabled: boolean
+  onPlayerFinish?: (playerId: string) => void
+  activePlayers: PlayerObjectWithPosition[]
 }
 
 export function GameContent({
   config,
   raceStarted,
-  playerObjects,
-  cameraTrackingEnabled
+  cameraTrackingEnabled,
+  onPlayerFinish,
+  activePlayers
 }: GameContentProps) {
   const { addPlayerBody, getPlayerBodies } = usePlayerBodies()
 
@@ -69,7 +71,10 @@ export function GameContent({
             : [0, 0, 0]
         }
       >
-        <FinishLine config={config.finishLine} />
+        <FinishLine
+          config={config.finishLine}
+          onPlayerFinish={onPlayerFinish}
+        />
 
         {config.walls.map((wall) => (
           <Wall
@@ -85,7 +90,7 @@ export function GameContent({
           />
         ))}
 
-        {playerObjects.map((playerBox) => (
+        {activePlayers.map((playerBox) => (
           <Player
             key={playerBox.id}
             config={{
