@@ -12,6 +12,7 @@ interface GameContentProps {
   cameraTrackingEnabled: boolean
   onPlayerFinish?: (playerId: string) => void
   activePlayers: PlayerObjectWithPosition[]
+  allPlayersFinished: boolean
 }
 
 export function GameContent({
@@ -19,15 +20,17 @@ export function GameContent({
   raceStarted,
   cameraTrackingEnabled,
   onPlayerFinish,
-  activePlayers
+  activePlayers,
+  allPlayersFinished
 }: GameContentProps) {
   const { addPlayerBody, getPlayerBodies } = usePlayerBodies()
 
   useCameraTracking({
     playerBodies: getPlayerBodies(),
+    activePlayers,
     config,
     raceStarted,
-    enabled: cameraTrackingEnabled
+    enabled: cameraTrackingEnabled && !allPlayersFinished
   })
 
   return (
@@ -42,7 +45,7 @@ export function GameContent({
               ]
             : [0, 0, 0]
         }
-        enabled={!raceStarted || !cameraTrackingEnabled}
+        enabled={!raceStarted || !cameraTrackingEnabled || allPlayersFinished}
       />
 
       <ambientLight intensity={1.2} />

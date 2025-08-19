@@ -3,9 +3,11 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { Vector3 } from 'three'
 import type { GameConfig } from '../types/gameConfig'
 import type { PlayerData } from './usePlayerPositions'
+import type { PlayerObjectWithPosition } from '../utils/mapRegistry'
 
 interface UseCameraTrackingProps {
   playerBodies: PlayerData[]
+  activePlayers: PlayerObjectWithPosition[]
   config: GameConfig
   raceStarted: boolean
   enabled: boolean
@@ -13,6 +15,7 @@ interface UseCameraTrackingProps {
 
 export function useCameraTracking({ 
   playerBodies, 
+  activePlayers,
   config, 
   raceStarted,
   enabled 
@@ -55,14 +58,24 @@ export function useCameraTracking({
     }
   }, [camera, config.camera.position, raceStarted])
 
-  // 가장 낮은 위치에 있는 플레이어 찾기 (가장 아래에 있는 플레이어)
+  // 가장 낮은 위치에 있는 활성 플레이어 찾기 (가장 아래에 있는 플레이어)
   const findLowestPlayer = (): PlayerData | null => {
-    if (playerBodies.length === 0) return null
+    if (playerBodies.length === 0 || activePlayers.length === 0) return null
     
-    let lowestPlayer = playerBodies[0]
+    // 활성 플레이어의 ID 집합 생성
+    const activePlayerIds = new Set(activePlayers.map(p => p.id))
+    
+    // 활성 플레이어들 중에서만 검색
+    const activePlayerBodies = playerBodies.filter(playerData => 
+      activePlayerIds.has(playerData.id)
+    )
+    
+    if (activePlayerBodies.length === 0) return null
+    
+    let lowestPlayer = activePlayerBodies[0]
     let minY = Infinity
     
-    for (const playerData of playerBodies) {
+    for (const playerData of activePlayerBodies) {
       const y = playerData.currentPosition.y
       if (y < minY) {
         minY = y
@@ -74,8 +87,8 @@ export function useCameraTracking({
   }
 
   useFrame(() => {
-    if (!raceStarted || playerBodies.length === 0 || !enabled) {
-      // 경주가 시작되지 않았거나 카메라 추적이 비활성화되면 초기 카메라 설정 유지
+    if (!raceStarted || playerBodies.length === 0 || activePlayers.length === 0 || !enabled) {
+      // 경주가 시작되지 않았거나 활성 플레이어가 없거나 카메라 추적이 비활성화되면 초기 카메라 설정 유지
       return
     }
     
