@@ -28,6 +28,7 @@ export interface ObstacleConfig {
   rotation?: Vector3
   color?: string
   mass?: number
+  rotationSpeed?: Vector3 // 각 축별 회전 속도 (초당 라디안)
 }
 
 export interface FinishLineConfig {
