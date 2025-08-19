@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { theme } from '../styles'
 
@@ -7,13 +7,30 @@ interface PlayerInputProps {
   disabled?: boolean
 }
 
+const STORAGE_KEY = 'gacha-players-input'
+const DEFAULT_PLAYERS = 'Mike*5,Steve*5,Hellen*5'
+
 export function PlayerInput({ onPlayersChange, disabled }: PlayerInputProps) {
-  const [playersText, setPlayersText] = useState('성욱*5,동현*5,하은*5')
+  // localStorage에서 불러오기, 없으면 기본값 사용
+  const [playersText, setPlayersText] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    return saved || DEFAULT_PLAYERS
+  })
+
+  // 초기값을 부모에게 전달
+  useEffect(() => {
+    onPlayersChange(playersText)
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setPlayersText(value)
     onPlayersChange(value)
+  }
+
+  const handleBlur = () => {
+    // blur 시 localStorage에 저장
+    localStorage.setItem(STORAGE_KEY, playersText)
   }
 
   return (
@@ -23,7 +40,8 @@ export function PlayerInput({ onPlayersChange, disabled }: PlayerInputProps) {
         type="text"
         value={playersText}
         onChange={handleChange}
-        placeholder="Mike*5,David*5,Steve*5"
+        onBlur={handleBlur}
+        placeholder="Mike*5,Steve*5,Hellen*5"
         disabled={disabled}
       />
       <InputHint>이름*개수,이름*개수 형식으로 입력</InputHint>

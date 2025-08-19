@@ -20,7 +20,7 @@ interface GameMapProps {
 export function GameMap({ config }: GameMapProps) {
   const [raceStarted, setRaceStarted] = useState(false)
   const [cameraTrackingEnabled, setCameraTrackingEnabled] = useState(true)
-  const [playersInput, setPlayersInput] = useState('성욱*5,동현*5,하은*5')
+  const [playersInput, setPlayersInput] = useState('')
   const [gravity, setGravity] = useState(-9.82)
   const { finishedPlayers, onPlayerFinish, resetRanking } =
     useFinishLineDetection()
@@ -95,8 +95,12 @@ export function GameMap({ config }: GameMapProps) {
               <GravityPresets>
                 <PresetButton onClick={() => setGravity(-2)}>약함</PresetButton>
                 <PresetButton onClick={() => setGravity(-5)}>보통</PresetButton>
-                <PresetButton onClick={() => setGravity(-9.82)}>지구</PresetButton>
-                <PresetButton onClick={() => setGravity(-15)}>강함</PresetButton>
+                <PresetButton onClick={() => setGravity(-9.82)}>
+                  지구
+                </PresetButton>
+                <PresetButton onClick={() => setGravity(-15)}>
+                  강함
+                </PresetButton>
               </GravityPresets>
             </GravityControl>
             <button onClick={startRace}>경주 시작!</button>
@@ -213,7 +217,7 @@ const GravitySlider = styled.input`
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.3);
   outline: none;
-  
+
   &::-webkit-slider-thumb {
     appearance: none;
     width: 18px;

@@ -36,7 +36,11 @@ export function Obstacle({ config }: { config: ObstacleConfig }) {
     return (
       <mesh ref={ref}>
         <boxGeometry args={[config.size.x, config.size.y, config.size.z]} />
-        <meshStandardMaterial color={config.color || '#e67e22'} />
+        <meshStandardMaterial 
+          color={config.color || '#e67e22'} 
+          transparent={true} 
+          opacity={0.5} 
+        />
       </mesh>
     )
   }
@@ -58,7 +62,11 @@ export function Obstacle({ config }: { config: ObstacleConfig }) {
         <cylinderGeometry
           args={[config.size.x, config.size.x, config.size.y, 8]}
         />
-        <meshStandardMaterial color={config.color || '#e74c3c'} />
+        <meshStandardMaterial 
+          color={config.color || '#e74c3c'} 
+          transparent={true} 
+          opacity={0.5} 
+        />
       </mesh>
     )
   }
@@ -78,7 +86,11 @@ export function Obstacle({ config }: { config: ObstacleConfig }) {
     return (
       <mesh ref={ref}>
         <sphereGeometry args={[config.size.x / 2]} />
-        <meshStandardMaterial color={config.color || '#f39c12'} />
+        <meshStandardMaterial 
+          color={config.color || '#f39c12'} 
+          transparent={true} 
+          opacity={0.5} 
+        />
       </mesh>
     )
   }
