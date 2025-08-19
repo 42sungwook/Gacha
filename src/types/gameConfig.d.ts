@@ -49,6 +49,14 @@ export interface GameAreaConfig {
   }
 }
 
+export interface GameBoxConfig {
+  id: string
+  position: Vector3
+  mass: number
+  color: string
+  size: Vector3
+}
+
 export interface GameConfig {
   name: string
   description?: string

@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Physics } from '@react-three/cannon'
-import { OrbitControls } from '@react-three/drei'
-import { Player, Wall, Obstacle, FinishLine } from './objects'
+import { GameContent } from './GameContent'
 import type { GameConfig } from '../types/gameConfig'
-import { getDefaultPlayers, getDefaultPositions } from '../utils/mapRegistry'
+import { getDefaultPlayers, getDefaultPositions, type PlayerObjectWithPosition } from '../utils/mapRegistry'
 import styled from 'styled-components'
 import { theme } from '../styles'
 
@@ -22,7 +20,7 @@ export function GameMap({ config }: GameMapProps) {
   const players = getDefaultPlayers()
   const positions = getDefaultPositions()
 
-  const playerObjects = players.map((player, index) => ({
+  const playerObjects: PlayerObjectWithPosition[] = players.map((player, index) => ({
     ...player,
     position: positions[index]
   }))
@@ -45,77 +43,11 @@ export function GameMap({ config }: GameMapProps) {
           ]
         }}
       >
-        <OrbitControls
-          target={
-            config.camera.target
-              ? [
-                  config.camera.target.x,
-                  config.camera.target.y,
-                  config.camera.target.z
-                ]
-              : [0, 0, 0]
-          }
+        <GameContent 
+          config={config} 
+          raceStarted={raceStarted} 
+          playerObjects={playerObjects} 
         />
-
-        <ambientLight intensity={1.2} />
-        <directionalLight
-          position={[10, 15, 10]}
-          intensity={1.5}
-          castShadow
-        />
-        <pointLight
-          position={[-10, 10, -10]}
-          intensity={0.8}
-        />
-        <pointLight
-          position={[10, 10, 10]}
-          intensity={0.8}
-        />
-
-        <Physics
-          gravity={
-            raceStarted
-              ? [
-                  config.physics.gravity.x,
-                  config.physics.gravity.y,
-                  config.physics.gravity.z
-                ]
-              : [0, 0, 0]
-          }
-        >
-          {/* 결승선 (물리 바닥 역할) */}
-          <FinishLine config={config.finishLine} />
-
-          {/* 벽들 */}
-          {config.walls.map((wall) => (
-            <Wall
-              key={wall.id}
-              config={wall}
-            />
-          ))}
-
-          {/* 장애물들 */}
-          {config.obstacles.map((obstacle) => (
-            <Obstacle
-              key={obstacle.id}
-              config={obstacle}
-            />
-          ))}
-
-          {/* 플레이어 경주말들 */}
-          {playerObjects.map((playerBox) => (
-            <Player
-              key={playerBox.id}
-              config={{
-                id: playerBox.id,
-                position: playerBox.position,
-                mass: playerBox.mass,
-                color: playerBox.color,
-                size: { x: 1, y: 1, z: 1 }
-              }}
-            />
-          ))}
-        </Physics>
       </Canvas>
     </Container>
   )
