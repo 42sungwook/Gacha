@@ -1,131 +1,275 @@
 {
-  "name": "기본 경주 맵",
-  "description": "간단한 장애물이 있는 기본 낙하 경주 맵",
+  "name": "바운스 아레나: 대역전의 무대",
+  "description": "넓은 플랫폼에서 튀어오르며 순위가 계속 뒤바뀌는 스릴 넘치는 경주",
   "gameArea": {
     "boundaries": {
-      "width": 10,
+      "width": 12,
       "height": 200,
-      "depth": 10,
+      "depth": 12,
       "wallHeight": 200
     },
     "floor": {
       "position": { "x": 0, "y": -1, "z": 0 },
-      "color": "#cccccc"
+      "color": "#bfc5c8"
     }
   },
   "boxes": [
     {
-      "id": "red-box",
-      "position": { "x": -2, "y": 15, "z": -2 },
-      "mass": 0.5,
+      "id": "runner-1",
+      "position": { "x": -1.5, "y": 38, "z": -1.5 },
+      "mass": 1,
       "color": "#ff6b6b",
       "size": { "x": 1, "y": 1, "z": 1 }
     },
     {
-      "id": "blue-box",
-      "position": { "x": 0, "y": 15, "z": 0 },
+      "id": "runner-2",
+      "position": { "x": 0, "y": 38, "z": 0 },
       "mass": 1,
       "color": "#4ecdc4",
       "size": { "x": 1, "y": 1, "z": 1 }
     },
     {
-      "id": "green-box",
-      "position": { "x": 2, "y": 15, "z": 2 },
-      "mass": 1.5,
+      "id": "runner-3",
+      "position": { "x": 1.5, "y": 38, "z": 1.5 },
+      "mass": 1,
       "color": "#45b7d1",
-      "size": { "x": 1, "y": 1, "z": 1 }
-    },
-    {
-      "id": "yellow-box",
-      "position": { "x": -1, "y": 15, "z": 1 },
-      "mass": 2,
-      "color": "#f9ca24",
       "size": { "x": 1, "y": 1, "z": 1 }
     }
   ],
   "walls": [
     {
       "id": "wall-left",
-      "position": { "x": -5, "y": 1, "z": 0 },
-      "size": { "x": 0.5, "y": 50, "z": 10 }
+      "position": { "x": -6, "y": 100, "z": 0 },
+      "size": { "x": 0.5, "y": 200, "z": 12 }
     },
     {
       "id": "wall-right",
-      "position": { "x": 5, "y": 1, "z": 0 },
-      "size": { "x": 0.5, "y": 50, "z": 10 }
+      "position": { "x": 6, "y": 100, "z": 0 },
+      "size": { "x": 0.5, "y": 200, "z": 12 }
     },
     {
       "id": "wall-front",
-      "position": { "x": 0, "y": 1, "z": -5 },
-      "size": { "x": 10, "y": 50, "z": 0.5 }
+      "position": { "x": 0, "y": 100, "z": -6 },
+      "size": { "x": 12, "y": 200, "z": 0.5 }
     },
     {
       "id": "wall-back",
-      "position": { "x": 0, "y": 1, "z": 5 },
-      "size": { "x": 10, "y": 50, "z": 0.5 }
+      "position": { "x": 0, "y": 100, "z": 6 },
+      "size": { "x": 12, "y": 200, "z": 0.5 }
     }
   ],
   "obstacles": [
     {
-      "id": "platform-1",
+      "id": "mega-blocker-1",
       "type": "box",
-      "position": { "x": -1, "y": 10, "z": 0 },
-      "size": { "x": 3, "y": 0.5, "z": 1 },
-      "rotation": { "x": 0, "y": 0, "z": 0.1 },
-      "color": "#e67e22"
+      "position": { "x": -2, "y": 85, "z": -2 },
+      "size": { "x": 7, "y": 0.5, "z": 7 },
+      "rotation": { "x": 0.1, "y": 0.1, "z": 0.1 },
+      "rotationSpeed": { "x": 0.3, "y": 0.2, "z": 0.2 },
+      "color": "#ff6b6b"
     },
     {
-      "id": "platform-2",
+      "id": "mega-blocker-2",
       "type": "box",
-      "position": { "x": 2, "y": 7, "z": -1 },
-      "size": { "x": 2, "y": 0.5, "z": 3 },
-      "rotation": { "x": 0.15, "y": 0, "z": -0.1 },
-      "color": "#e67e22"
+      "position": { "x": 2, "y": 85, "z": 2 },
+      "size": { "x": 7, "y": 0.5, "z": 7 },
+      "rotation": { "x": -0.1, "y": -0.1, "z": -0.1 },
+      "rotationSpeed": { "x": -0.3, "y": -0.2, "z": -0.2 },
+      "color": "#ff6b6b"
     },
     {
-      "id": "ramp-left",
+      "id": "mega-blocker-3",
       "type": "box",
-      "position": { "x": -2.5, "y": 8, "z": 1 },
-      "size": { "x": 1.5, "y": 0.3, "z": 2 },
-      "rotation": { "x": 0, "y": 0.3, "z": 0.2 },
-      "color": "#f39c12"
+      "position": { "x": -2, "y": 85, "z": 2 },
+      "size": { "x": 7, "y": 0.5, "z": 7 },
+      "rotation": { "x": 0.1, "y": -0.1, "z": 0.1 },
+      "rotationSpeed": { "x": 0.2, "y": 0.3, "z": -0.2 },
+      "color": "#ff6b6b"
     },
     {
-      "id": "ramp-right",
+      "id": "mega-blocker-4",
       "type": "box",
-      "position": { "x": 1.5, "y": 5, "z": 2 },
-      "size": { "x": 2, "y": 0.3, "z": 1.5 },
-      "rotation": { "x": -0.2, "y": -0.1, "z": 0 },
-      "color": "#f39c12"
+      "position": { "x": 2, "y": 85, "z": -2 },
+      "size": { "x": 7, "y": 0.5, "z": 7 },
+      "rotation": { "x": -0.1, "y": 0.1, "z": -0.1 },
+      "rotationSpeed": { "x": -0.2, "y": -0.3, "z": 0.2 },
+      "color": "#ff6b6b"
+    },
+
+    {
+      "id": "level-2-almost-full",
+      "type": "box",
+      "position": { "x": -1, "y": 78, "z": -1 },
+      "size": { "x": 9, "y": 0.4, "z": 9 },
+      "rotation": { "x": 0.15, "y": 0.1, "z": 0.05 },
+      "rotationSpeed": { "x": 0.4, "y": 0.3, "z": 0.2 },
+      "color": "#4ecdc4"
     },
     {
-      "id": "slide-1",
+      "id": "level-2-cover",
       "type": "box",
-      "position": { "x": 0, "y": 6, "z": -2 },
-      "size": { "x": 1, "y": 0.2, "z": 3 },
-      "rotation": { "x": 0.3, "y": 0, "z": 0 },
-      "color": "#9b59b6"
+      "position": { "x": 1, "y": 78, "z": 1 },
+      "size": { "x": 9, "y": 0.4, "z": 9 },
+      "rotation": { "x": -0.15, "y": -0.1, "z": -0.05 },
+      "rotationSpeed": { "x": -0.4, "y": -0.3, "z": -0.2 },
+      "color": "#4ecdc4"
+    },
+
+    {
+      "id": "level-3-massive-left",
+      "type": "box",
+      "position": { "x": -2.5, "y": 70, "z": 0 },
+      "size": { "x": 8, "y": 0.4, "z": 11 },
+      "rotation": { "x": 0.2, "y": 0.05, "z": 0.1 },
+      "rotationSpeed": { "x": 0.5, "y": 0.3, "z": 0.2 },
+      "color": "#45b7d1"
     },
     {
-      "id": "spinner",
-      "type": "cylinder",
-      "position": { "x": 0, "y": 3, "z": 0 },
-      "size": { "x": 0.2, "y": 2, "z": 0.2 },
-      "rotation": { "x": 0, "y": 50, "z": 0 },
-      "color": "#e74c3c",
-      "mass": 0
+      "id": "level-3-massive-right",
+      "type": "box",
+      "position": { "x": 2.5, "y": 70, "z": 0 },
+      "size": { "x": 8, "y": 0.4, "z": 11 },
+      "rotation": { "x": 0.2, "y": -0.05, "z": -0.1 },
+      "rotationSpeed": { "x": 0.5, "y": -0.3, "z": -0.2 },
+      "color": "#45b7d1"
+    },
+
+    {
+      "id": "level-4-giant-blocker",
+      "type": "box",
+      "position": { "x": 0, "y": 62, "z": 0 },
+      "size": { "x": 11, "y": 0.4, "z": 11 },
+      "rotation": { "x": 0.1, "y": 0, "z": 0.1 },
+      "rotationSpeed": { "x": 0.6, "y": 0.4, "z": 0.3 },
+      "color": "#fd79a8"
+    },
+
+    {
+      "id": "level-5-quadrant-1",
+      "type": "box",
+      "position": { "x": -2.5, "y": 54, "z": -2.5 },
+      "size": { "x": 8, "y": 0.5, "z": 8 },
+      "rotation": { "x": 0.2, "y": 0.1, "z": 0.15 },
+      "rotationSpeed": { "x": 0.7, "y": 0.4, "z": 0.3 },
+      "color": "#6c5ce7"
+    },
+    {
+      "id": "level-5-quadrant-2",
+      "type": "box",
+      "position": { "x": 2.5, "y": 54, "z": -2.5 },
+      "size": { "x": 8, "y": 0.5, "z": 8 },
+      "rotation": { "x": 0.2, "y": -0.1, "z": -0.15 },
+      "rotationSpeed": { "x": 0.7, "y": -0.4, "z": -0.3 },
+      "color": "#6c5ce7"
+    },
+    {
+      "id": "level-5-quadrant-3",
+      "type": "box",
+      "position": { "x": -2.5, "y": 54, "z": 2.5 },
+      "size": { "x": 8, "y": 0.5, "z": 8 },
+      "rotation": { "x": -0.2, "y": 0.1, "z": 0.15 },
+      "rotationSpeed": { "x": -0.7, "y": 0.4, "z": 0.3 },
+      "color": "#6c5ce7"
+    },
+    {
+      "id": "level-5-quadrant-4",
+      "type": "box",
+      "position": { "x": 2.5, "y": 54, "z": 2.5 },
+      "size": { "x": 8, "y": 0.5, "z": 8 },
+      "rotation": { "x": -0.2, "y": -0.1, "z": -0.15 },
+      "rotationSpeed": { "x": -0.7, "y": -0.4, "z": -0.3 },
+      "color": "#6c5ce7"
+    },
+
+    {
+      "id": "level-6-ultra-wide",
+      "type": "box",
+      "position": { "x": 0, "y": 46, "z": 0 },
+      "size": { "x": 11.5, "y": 0.5, "z": 11.5 },
+      "rotation": { "x": 0.25, "y": 0, "z": 0.05 },
+      "rotationSpeed": { "x": 0.3, "y": 0.5, "z": 0.2 },
+      "color": "#00b894"
+    },
+
+    {
+      "id": "level-7-rotating-maze-1",
+      "type": "box",
+      "position": { "x": -1.5, "y": 38, "z": -1.5 },
+      "size": { "x": 9, "y": 0.4, "z": 9 },
+      "rotation": { "x": 0.15, "y": 0.1, "z": 0.1 },
+      "rotationSpeed": { "x": 0, "y": 1.8, "z": 0 },
+      "color": "#e17055"
+    },
+    {
+      "id": "level-7-rotating-maze-2",
+      "type": "box",
+      "position": { "x": 1.5, "y": 38, "z": 1.5 },
+      "size": { "x": 9, "y": 0.4, "z": 9 },
+      "rotation": { "x": -0.15, "y": -0.1, "z": -0.1 },
+      "rotationSpeed": { "x": 0, "y": -1.8, "z": 0 },
+      "color": "#e17055"
+    },
+
+    {
+      "id": "level-8-chaos-full",
+      "type": "box",
+      "position": { "x": 0, "y": 30, "z": 0 },
+      "size": { "x": 11, "y": 0.5, "z": 11 },
+      "rotation": { "x": 0.3, "y": 0.1, "z": 0.2 },
+      "rotationSpeed": { "x": 1.5, "y": 1.2, "z": 0.8 },
+      "color": "#fdcb6e"
+    },
+
+    {
+      "id": "level-9-near-complete",
+      "type": "box",
+      "position": { "x": 0, "y": 22, "z": 0 },
+      "size": { "x": 11.8, "y": 0.5, "z": 11.8 },
+      "rotation": { "x": 0.35, "y": 0.1, "z": 0.25 },
+      "rotationSpeed": { "x": 1.0, "y": 0.7, "z": 0.9 },
+      "color": "#00cec9"
+    },
+
+    {
+      "id": "level-10-almost-sealed",
+      "type": "box",
+      "position": { "x": 0, "y": 14, "z": 0 },
+      "size": { "x": 11.9, "y": 0.4, "z": 11.9 },
+      "rotation": { "x": 0.4, "y": 0.15, "z": 0.3 },
+      "rotationSpeed": { "x": 2.0, "y": 1.5, "z": 1.8 },
+      "color": "#ff7675"
+    },
+
+    {
+      "id": "final-tiny-gap",
+      "type": "box",
+      "position": { "x": 0, "y": 8, "z": 0 },
+      "size": { "x": 11.95, "y": 0.3, "z": 11.95 },
+      "rotation": { "x": 0.5, "y": 0.2, "z": 0.4 },
+      "rotationSpeed": { "x": 2.5, "y": 2.0, "z": 2.2 },
+      "color": "#2d3436"
     }
   ],
   "finishLine": {
     "position": { "x": 0, "y": -0.5, "z": 0 },
-    "size": { "x": 8, "y": 0.1, "z": 8 },
+    "size": { "x": 12, "y": 0.1, "z": 12 },
     "color": "#2ecc71"
   },
   "physics": {
-    "gravity": { "x": 0, "y": -9.82, "z": 0 }
+    "gravity": { "x": 0, "y": -9.82, "z": 0 },
+    "airDrag": 0.02,
+    "friction": 0.4
   },
   "camera": {
-    "position": { "x": 0, "y": 8, "z": 12 },
-    "target": { "x": 0, "y": 5, "z": 0 }
+    "position": { "x": 0, "y": 18, "z": 16 },
+    "target": { "x": 0, "y": 14, "z": 0 },
+    "fov": 55
+  },
+  "lighting": {
+    "ambient": 0.6,
+    "directional": {
+      "intensity": 0.9,
+      "direction": { "x": -0.6, "y": -1, "z": -0.2 }
+    }
   }
 }

@@ -11,11 +11,9 @@ export interface PlayerObjectWithPosition {
 
 // Todo: maps 폴더에서 자동으로 모든 파일 import
 import defaultMapConfig from '../maps/defaultMap.json'
-import fallingMapConfig from '../maps/fallingMap.json'
 
 const mapConfigs = {
-  defaultMap: defaultMapConfig,
-  fallingMap: fallingMapConfig
+  defaultMap: defaultMapConfig
 }
 
 // 동적으로 mapRegistry 생성
@@ -40,13 +38,13 @@ export const getMapById = (id: string) => mapRegistry[id]
 // 맵에서 최고 장애물 높이를 계산하는 함수
 const getMapMaxHeight = (config: GameConfig): number => {
   let maxHeight = 0
-  
+
   // 모든 장애물의 높이를 확인
-  config.obstacles.forEach(obstacle => {
+  config.obstacles.forEach((obstacle) => {
     const obstacleTop = obstacle.position.y + (obstacle.size?.y || 1) / 2
     maxHeight = Math.max(maxHeight, obstacleTop)
   })
-  
+
   return maxHeight
 }
 
@@ -56,7 +54,7 @@ export const getDefaultPositions = (count?: number): Vector3[] => {
   const positions: Vector3[] = []
   const gridSize = Math.ceil(Math.sqrt(maxCount))
   const spacing = 1.5
-  
+
   // 현재 사용되는 기본 맵 설정에서 최고 높이 계산
   const defaultConfig = mapConfigs.defaultMap as GameConfig
   const mapMaxHeight = getMapMaxHeight(defaultConfig)
