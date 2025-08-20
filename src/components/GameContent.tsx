@@ -3,9 +3,11 @@ import { Physics } from '@react-three/cannon'
 import { Player, Wall, Obstacle, FinishLine } from './objects'
 import type { GameConfig } from '../types/gameConfig'
 import { useCameraTracking } from '../hooks/useCameraTracking'
-import { usePlayerBodies } from '../hooks/usePlayerPositions'
 import { useOutOfBoundsDetection } from '../hooks/useOutOfBoundsDetection'
 import type { PlayerObjectWithPosition } from '../utils/mapRegistry'
+import type { PlayerData } from '../hooks/usePlayerPositions'
+import type { Api } from '@react-three/cannon'
+import * as THREE from 'three'
 
 const AMBIENT_LIGHT_INTENSITY = 1.2
 const DIRECTIONAL_LIGHT_INTENSITY = 1.5
@@ -20,6 +22,8 @@ interface GameContentProps {
   onPlayerOutOfBounds?: (playerId: string) => void
   activePlayers: PlayerObjectWithPosition[]
   allPlayersFinished: boolean
+  playerBodies: PlayerData[]
+  onBodyRef: (id: string, api: Api<THREE.Mesh>[1]) => void
 }
 
 export function GameContent({
@@ -29,12 +33,13 @@ export function GameContent({
   onPlayerFinish,
   onPlayerOutOfBounds,
   activePlayers,
-  allPlayersFinished
+  allPlayersFinished,
+  playerBodies,
+  onBodyRef
 }: GameContentProps) {
-  const { addPlayerBody, getPlayerBodies } = usePlayerBodies()
 
   useCameraTracking({
-    playerBodies: getPlayerBodies(),
+    playerBodies: playerBodies,
     activePlayers,
     config,
     raceStarted,
@@ -42,7 +47,7 @@ export function GameContent({
   })
 
   useOutOfBoundsDetection({
-    playerBodies: getPlayerBodies(),
+    playerBodies: playerBodies,
     config,
     onPlayerOutOfBounds: onPlayerOutOfBounds || (() => {}),
     enabled: raceStarted && !allPlayersFinished
@@ -118,10 +123,12 @@ export function GameContent({
               color: playerBox.color,
               size: { x: PLAYER_BOX_SIZE, y: PLAYER_BOX_SIZE, z: PLAYER_BOX_SIZE }
             }}
-            onBodyRef={addPlayerBody}
+            onBodyRef={onBodyRef}
+            name={playerBox.name}
           />
         ))}
       </Physics>
+
     </>
   )
 }

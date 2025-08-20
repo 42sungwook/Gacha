@@ -10,6 +10,7 @@ import {
 } from '../utils/mapRegistry'
 import { parsePlayersInput, validatePlayersInput } from '../utils/playerParser'
 import { useFinishLineDetection } from '../hooks/useFinishLineDetection'
+import { usePlayerBodies } from '../hooks/usePlayerPositions'
 import styled from 'styled-components'
 import { theme } from '../styles'
 
@@ -41,6 +42,7 @@ export function GameMap({ config }: GameMapProps) {
   const [removedPlayerIds, setRemovedPlayerIds] = useState<Set<string>>(
     new Set()
   )
+  const { addPlayerBody, getPlayerBodies } = usePlayerBodies()
 
   const handlePlayersChange = (newPlayersInput: string) => {
     setPlayersInput(newPlayersInput)
@@ -190,6 +192,8 @@ export function GameMap({ config }: GameMapProps) {
           onPlayerOutOfBounds={handlePlayerOutOfBounds}
           activePlayers={activePlayers}
           allPlayersFinished={allPlayersFinished}
+          playerBodies={getPlayerBodies()}
+          onBodyRef={addPlayerBody}
         />
       </Canvas>
 
@@ -202,6 +206,7 @@ export function GameMap({ config }: GameMapProps) {
         onPlayersChange={handlePlayersChange}
         disabled={raceStarted}
       />
+
     </Container>
   )
 }

@@ -1,4 +1,4 @@
-import { useBox } from '@react-three/cannon'
+import { useBox, type CollideBeginEvent } from '@react-three/cannon'
 import type { FinishLineConfig } from '../../types/gameConfig'
 
 interface FinishLineProps {
@@ -11,7 +11,7 @@ export function FinishLine({ config, onPlayerFinish }: FinishLineProps) {
     mass: 0,
     position: [config.position.x, config.position.y, config.position.z],
     args: [config.size.x, config.size.y, config.size.z],
-    onCollideBegin: (e: any) => {
+    onCollideBegin: (e: CollideBeginEvent) => {
       const otherBody = e.body
       const target = e.target
       const playerId = otherBody?.userData?.playerId || target?.userData?.playerId

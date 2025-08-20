@@ -8,7 +8,7 @@ interface PlayerInputProps {
 }
 
 const STORAGE_KEY = 'gacha-players-input'
-const DEFAULT_PLAYERS = 'Mike*5,Steve*5,Hellen*5'
+const DEFAULT_PLAYERS = 'A*3,B*3,C*3'
 
 export function PlayerInput({ onPlayersChange, disabled }: PlayerInputProps) {
   // localStorage에서 불러오기, 없으면 기본값 사용
@@ -41,7 +41,7 @@ export function PlayerInput({ onPlayersChange, disabled }: PlayerInputProps) {
         value={playersText}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder="Mike*5,Steve*5,Hellen*5"
+        placeholder={DEFAULT_PLAYERS}
         disabled={disabled}
       />
       <InputHint>이름*개수,이름*개수 형식으로 입력</InputHint>
