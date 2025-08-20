@@ -7,6 +7,11 @@ import { usePlayerBodies } from '../hooks/usePlayerPositions'
 import { useOutOfBoundsDetection } from '../hooks/useOutOfBoundsDetection'
 import type { PlayerObjectWithPosition } from '../utils/mapRegistry'
 
+const AMBIENT_LIGHT_INTENSITY = 1.2
+const DIRECTIONAL_LIGHT_INTENSITY = 1.5
+const POINT_LIGHT_INTENSITY = 0.8
+const PLAYER_BOX_SIZE = 1
+
 interface GameContentProps {
   config: GameConfig
   raceStarted: boolean
@@ -58,19 +63,19 @@ export function GameContent({
         enabled={!raceStarted || !cameraTrackingEnabled || allPlayersFinished}
       />
 
-      <ambientLight intensity={1.2} />
+      <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
       <directionalLight
         position={[10, 15, 10]}
-        intensity={1.5}
+        intensity={DIRECTIONAL_LIGHT_INTENSITY}
         castShadow
       />
       <pointLight
         position={[-10, 10, -10]}
-        intensity={0.8}
+        intensity={POINT_LIGHT_INTENSITY}
       />
       <pointLight
         position={[10, 10, 10]}
-        intensity={0.8}
+        intensity={POINT_LIGHT_INTENSITY}
       />
 
       <Physics
@@ -111,7 +116,7 @@ export function GameContent({
               position: playerBox.position,
               mass: playerBox.mass,
               color: playerBox.color,
-              size: { x: 1, y: 1, z: 1 }
+              size: { x: PLAYER_BOX_SIZE, y: PLAYER_BOX_SIZE, z: PLAYER_BOX_SIZE }
             }}
             onBodyRef={addPlayerBody}
           />

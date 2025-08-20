@@ -1,5 +1,10 @@
 import type { PlayerObjectWithPosition } from './mapRegistry'
 
+const MAX_PLAYERS_PER_NAME = 50
+const MAX_TOTAL_PLAYERS = 100
+const MIN_MASS = 0.5
+const MAX_MASS = 2.0
+
 const colors = [
   '#ff6b6b',
   '#4ecdc4',
@@ -42,7 +47,7 @@ export function parsePlayersInput(
       const [, name, countStr] = match
       const count = parseInt(countStr, 10)
 
-      if (count > 0 && count <= 50) {
+      if (count > 0 && count <= MAX_PLAYERS_PER_NAME) {
         for (let i = 0; i < count; i++) {
           if (positionIndex >= positions.length) {
             break
@@ -52,7 +57,7 @@ export function parsePlayersInput(
             id: `${name}-${i + 1}`,
             name: `${name}#${i + 1}`,
             position: positions[positionIndex],
-            mass: Math.random() * 1.5 + 0.5,
+            mass: Math.random() * (MAX_MASS - MIN_MASS) + MIN_MASS,
             color: colors[colorIndex % colors.length]
           })
 
@@ -104,20 +109,20 @@ export function validatePlayersInput(input: string): {
       }
     }
 
-    if (count > 50) {
+    if (count > MAX_PLAYERS_PER_NAME) {
       return {
         isValid: false,
-        error: `한 플레이어당 최대 50개까지 가능합니다: "${entry}"`
+        error: `한 플레이어당 최대 ${MAX_PLAYERS_PER_NAME}개까지 가능합니다: "${entry}"`
       }
     }
 
     totalCount += count
   }
 
-  if (totalCount > 100) {
+  if (totalCount > MAX_TOTAL_PLAYERS) {
     return {
       isValid: false,
-      error: `총 플레이어 수가 100개를 초과합니다. (현재: ${totalCount}개)`
+      error: `총 플레이어 수가 ${MAX_TOTAL_PLAYERS}개를 초과합니다. (현재: ${totalCount}개)`
     }
   }
 

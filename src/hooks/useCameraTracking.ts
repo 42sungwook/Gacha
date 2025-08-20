@@ -5,6 +5,10 @@ import type { GameConfig } from '../types/gameConfig'
 import type { PlayerData } from './usePlayerPositions'
 import type { PlayerObjectWithPosition } from '../utils/mapRegistry'
 
+const CAMERA_HEIGHT_OFFSET = 8
+const CAMERA_DISTANCE_OFFSET = 12
+const CAMERA_LERP_FACTOR = 0.03
+
 interface UseCameraTrackingProps {
   playerBodies: PlayerData[]
   activePlayers: PlayerObjectWithPosition[]
@@ -100,14 +104,14 @@ export function useCameraTracking({
     
     // 카메라 목표 위치 설정 (플레이어를 따라다니면서 약간 뒤쪽에서)
     const targetX = playerPos.x
-    const targetY = playerPos.y + 8
-    const targetZ = playerPos.z + 12
+    const targetY = playerPos.y + CAMERA_HEIGHT_OFFSET
+    const targetZ = playerPos.z + CAMERA_DISTANCE_OFFSET
     
     targetPositionRef.current.set(targetX, targetY, targetZ)
     targetLookAtRef.current.set(playerPos.x, playerPos.y, playerPos.z)
     
     // 부드러운 카메라 이동 (더 부드러운 lerp 사용)
-    const lerpFactor = 0.03
+    const lerpFactor = CAMERA_LERP_FACTOR
     currentPositionRef.current.lerp(targetPositionRef.current, lerpFactor)
     currentLookAtRef.current.lerp(targetLookAtRef.current, lerpFactor)
     

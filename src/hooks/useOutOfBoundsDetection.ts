@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react'
 import type { GameConfig } from '../types/gameConfig'
 import type { PlayerData } from './usePlayerPositions'
 
+const BOUNDARY_BUFFER = 5
+const MIN_Y_OFFSET = -20
+const MAX_Y_OFFSET = 50
+const CHECK_INTERVAL = 1000
+
 interface UseOutOfBoundsDetectionProps {
   playerBodies: PlayerData[]
   config: GameConfig
@@ -36,15 +41,15 @@ export function useOutOfBoundsDetection({
         const boundaries = config.gameArea.boundaries
         const halfWidth = boundaries.width / 2
         const halfDepth = boundaries.depth / 2
-        const minY = config.finishLine.position.y - 20 // 결승선보다 20 아래까지 허용
-        const maxY = boundaries.height + 50 // 맵 높이보다 50 위까지 허용
+        const minY = config.finishLine.position.y + MIN_Y_OFFSET
+        const maxY = boundaries.height + MAX_Y_OFFSET
 
         // 경계 체크
         const isOutOfBounds = 
-          currentPosition.x < -halfWidth - 5 ||
-          currentPosition.x > halfWidth + 5 ||
-          currentPosition.z < -halfDepth - 5 ||
-          currentPosition.z > halfDepth + 5 ||
+          currentPosition.x < -halfWidth - BOUNDARY_BUFFER ||
+          currentPosition.x > halfWidth + BOUNDARY_BUFFER ||
+          currentPosition.z < -halfDepth - BOUNDARY_BUFFER ||
+          currentPosition.z > halfDepth + BOUNDARY_BUFFER ||
           currentPosition.y < minY ||
           currentPosition.y > maxY
 
@@ -53,7 +58,7 @@ export function useOutOfBoundsDetection({
           onPlayerOutOfBounds(id)
         }
       })
-    }, 1000) // 1초마다 체크
+    }, CHECK_INTERVAL)
 
     return () => {
       clearInterval(checkInterval)
