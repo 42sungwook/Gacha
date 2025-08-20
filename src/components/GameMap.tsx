@@ -22,11 +22,20 @@ export function GameMap({ config }: GameMapProps) {
   const [cameraTrackingEnabled, setCameraTrackingEnabled] = useState(true)
   const [playersInput, setPlayersInput] = useState('')
   const [gravity, setGravity] = useState(-9.82)
-  const { finishedPlayers, onPlayerFinish, resetRanking } =
+  const { finishedPlayers, onPlayerFinish, onPlayerOutOfBounds, resetRanking } =
     useFinishLineDetection()
   const [removedPlayerIds, setRemovedPlayerIds] = useState<Set<string>>(
     new Set()
   )
+
+  const handlePlayersChange = (newPlayersInput: string) => {
+    setPlayersInput(newPlayersInput)
+
+    if (!raceStarted) {
+      resetRanking()
+      setRemovedPlayerIds(new Set())
+    }
+  }
 
   const startRace = () => {
     const validation = validatePlayersInput(playersInput)
@@ -61,6 +70,14 @@ export function GameMap({ config }: GameMapProps) {
       setRemovedPlayerIds((prev) => new Set(prev).add(id))
     }
     onPlayerFinish(playerId, player?.name || playerId, removePlayer)
+  }
+
+  const handlePlayerOutOfBounds = (playerId: string) => {
+    const player = playerObjects.find((p) => p.id === playerId)
+    const removePlayer = (id: string) => {
+      setRemovedPlayerIds((prev) => new Set(prev).add(id))
+    }
+    onPlayerOutOfBounds(playerId, player?.name || playerId, removePlayer)
   }
 
   const activePlayers = playerObjects.filter((p) => !removedPlayerIds.has(p.id))
@@ -107,7 +124,15 @@ export function GameMap({ config }: GameMapProps) {
           </>
         )}
         {allPlayersFinished && (
-          <button onClick={() => setRaceStarted(false)}>다시 시작</button>
+          <button
+            onClick={() => {
+              resetRanking()
+              setRemovedPlayerIds(new Set())
+              setRaceStarted(false)
+            }}
+          >
+            다시 시작
+          </button>
         )}
 
         {raceStarted && !allPlayersFinished && (
@@ -134,6 +159,7 @@ export function GameMap({ config }: GameMapProps) {
           raceStarted={raceStarted}
           cameraTrackingEnabled={cameraTrackingEnabled}
           onPlayerFinish={handlePlayerFinish}
+          onPlayerOutOfBounds={handlePlayerOutOfBounds}
           activePlayers={activePlayers}
           allPlayersFinished={allPlayersFinished}
         />
@@ -145,7 +171,7 @@ export function GameMap({ config }: GameMapProps) {
       />
 
       <PlayerInput
-        onPlayersChange={setPlayersInput}
+        onPlayersChange={handlePlayersChange}
         disabled={raceStarted}
       />
     </Container>

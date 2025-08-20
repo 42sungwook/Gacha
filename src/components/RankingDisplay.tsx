@@ -22,9 +22,15 @@ export function RankingDisplay({
         <RankingItem
           key={player.id}
           rank={player.rank}
+          isOutOfBounds={player.isOutOfBounds}
         >
-          <RankBadge rank={player.rank}>{player.rank}</RankBadge>
-          <PlayerName>{player.name}</PlayerName>
+          <RankBadge rank={player.rank} isOutOfBounds={player.isOutOfBounds}>
+            {player.isOutOfBounds ? 'X' : player.rank}
+          </RankBadge>
+          <PlayerName isOutOfBounds={player.isOutOfBounds}>
+            {player.name}
+          </PlayerName>
+          {player.isOutOfBounds && <OutOfBoundsLabel>장외</OutOfBoundsLabel>}
         </RankingItem>
       ))}
     </RankingContainer>
@@ -56,6 +62,7 @@ const RankingTitle = styled.h3`
 
 interface RankingItemProps {
   rank: number
+  isOutOfBounds?: boolean
 }
 
 const RankingItem = styled.div<RankingItemProps>`
@@ -63,7 +70,10 @@ const RankingItem = styled.div<RankingItemProps>`
   align-items: center;
   gap: ${theme.spacing.md};
   padding: ${theme.spacing.sm} 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid ${props => 
+    props.isOutOfBounds ? 'rgba(255, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.2)'};
+  background: ${props => 
+    props.isOutOfBounds ? 'rgba(255, 0, 0, 0.1)' : 'transparent'};
 
   &:last-child {
     border-bottom: none;
@@ -85,9 +95,14 @@ const RankingItem = styled.div<RankingItemProps>`
 
 interface RankBadgeProps {
   rank: number
+  isOutOfBounds?: boolean
 }
 
-const getRankColor = (rank: number) => {
+const getRankColor = (rank: number, isOutOfBounds?: boolean) => {
+  if (isOutOfBounds) {
+    return '#FF0000' // Red for out of bounds
+  }
+  
   switch (rank) {
     case 1:
       return '#FFD700' // Gold
@@ -104,17 +119,35 @@ const RankBadge = styled.div<RankBadgeProps>`
   width: 30px;
   height: 30px;
   border-radius: ${theme.borderRadius.round};
-  background: ${(props) => getRankColor(props.rank)};
-  color: ${theme.colors.black};
+  background: ${(props) => getRankColor(props.rank, props.isOutOfBounds)};
+  color: ${props => props.isOutOfBounds ? theme.colors.white : theme.colors.black};
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: ${theme.fontSize.sm};
   box-shadow: ${theme.shadows.md};
+  border: ${props => props.isOutOfBounds ? '2px solid #FF4444' : 'none'};
 `
 
-const PlayerName = styled.span`
+interface PlayerNameProps {
+  isOutOfBounds?: boolean
+}
+
+const PlayerName = styled.span<PlayerNameProps>`
   font-size: ${theme.fontSize.md};
   font-weight: 500;
+  color: ${props => props.isOutOfBounds ? '#FF6666' : theme.colors.white};
+  text-decoration: ${props => props.isOutOfBounds ? 'line-through' : 'none'};
+`
+
+const OutOfBoundsLabel = styled.span`
+  font-size: ${theme.fontSize.xs};
+  color: #FF4444;
+  background: rgba(255, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: ${theme.borderRadius.sm};
+  border: 1px solid #FF4444;
+  font-weight: bold;
+  margin-left: auto;
 `

@@ -4,6 +4,7 @@ import { Player, Wall, Obstacle, FinishLine } from './objects'
 import type { GameConfig } from '../types/gameConfig'
 import { useCameraTracking } from '../hooks/useCameraTracking'
 import { usePlayerBodies } from '../hooks/usePlayerPositions'
+import { useOutOfBoundsDetection } from '../hooks/useOutOfBoundsDetection'
 import type { PlayerObjectWithPosition } from '../utils/mapRegistry'
 
 interface GameContentProps {
@@ -11,6 +12,7 @@ interface GameContentProps {
   raceStarted: boolean
   cameraTrackingEnabled: boolean
   onPlayerFinish?: (playerId: string) => void
+  onPlayerOutOfBounds?: (playerId: string) => void
   activePlayers: PlayerObjectWithPosition[]
   allPlayersFinished: boolean
 }
@@ -20,6 +22,7 @@ export function GameContent({
   raceStarted,
   cameraTrackingEnabled,
   onPlayerFinish,
+  onPlayerOutOfBounds,
   activePlayers,
   allPlayersFinished
 }: GameContentProps) {
@@ -31,6 +34,13 @@ export function GameContent({
     config,
     raceStarted,
     enabled: cameraTrackingEnabled && !allPlayersFinished
+  })
+
+  useOutOfBoundsDetection({
+    playerBodies: getPlayerBodies(),
+    config,
+    onPlayerOutOfBounds: onPlayerOutOfBounds || (() => {}),
+    enabled: raceStarted && !allPlayersFinished
   })
 
   return (
